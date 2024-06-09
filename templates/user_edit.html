@@ -5,7 +5,7 @@
         <label for="username">新しいユーザー名:</label>
         <input type="text" id="username" name="username" value="{{ user.username }}">
         <label for="icon">新しいアイコン:</label>
-        <input type="file" id="icon" name="icon">
+        <input type="file" id="icon" name="icon" accept="image/png, image/jpg">
         <button type="submit">変更</button>
     </form>
     <a href="/users/{{ user.id }}" role="button">戻る</a>
