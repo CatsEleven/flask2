@@ -223,5 +223,18 @@ def user_list():
     users = User.query.all()
     return render_template('user_list.html', users=users)
 
+@app.route("/users/<int:user_id>/edit", methods=['GET', 'POST'])
+@login_required
+def edit_user(user_id):
+    user = User.query.get_or_404(user_id)
+    if request.method == 'POST':
+        new_username = request.form.get('username')
+        if new_username:
+            user.username = new_username
+            db.session.commit()
+            return redirect(f'/users/{user.id}')
+    return render_template('user_edit.html', user=user)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

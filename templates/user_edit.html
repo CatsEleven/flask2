@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ user.username }}の名前を変更</h1>
+    <form method="POST">
+        <label for="username">新しいユーザー名:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}">
+        <button type="submit">変更</button>
+    </form>
+    <a href="/users/{{ user.id }}" role="button">戻る</a>
+{% endblock %}
