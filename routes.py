@@ -109,10 +109,11 @@
 # if __name__ == "__main__":
 #     app.run(debug=True)
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 # from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import os
 from db import db, User, Post, init_app
 
@@ -120,6 +121,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.urandom(24)
+app.config['UPLOAD_FOLDER'] = 'static/icons/'  # アップロードフォルダの設定
 
 # DB初期化
 init_app(app)
@@ -231,9 +233,35 @@ def edit_user(user_id):
         new_username = request.form.get('username')
         if new_username:
             user.username = new_username
-            db.session.commit()
-            return redirect(f'/users/{user.id}')
+        if 'icon' in request.files:
+            icon = request.files['icon']
+            if icon.filename != '':
+                filename = secure_filename(icon.filename)
+                icon.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                user.icon = filename
+        db.session.commit()
+        return redirect(f'/users/{user.id}')
     return render_template('user_edit.html', user=user)
+# @app.route("/user/<int:user_id>/edit", methods=['GET', 'POST'])
+# @login_required
+# def edit_user(user_id):
+#     user = User.query.get_or_404(user_id)
+#     if request.method == 'POST':
+#         new_username = request.form.get('username')
+#         if new_username:
+#             user.username = new_username
+
+#         # アイコンアップロード処理
+#         if 'icon' in request.files:
+#             icon = request.files['icon']
+#             if icon.filename != '':
+#                 filename = secure_filename(icon.filename)
+#                 icon.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#                 user.icon = filename
+
+#         db.session.commit()
+#         return redirect(url_for('user_detail', user_id=user.id))
+#     return render_template('user_edit.html', user=user)
 
 
 if __name__ == "__main__":

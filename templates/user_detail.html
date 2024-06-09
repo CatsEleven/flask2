@@ -4,6 +4,7 @@
     <title>{{ user.username }}の詳細</title>
     <p>ID: {{ user.id }}</p>
     <p>ユーザー名: {{ user.username }}</p>
+    <img src="{{ url_for('static', filename='icons/' ~ user.icon) }}" alt="{{ user.username }}のアイコン">
     <a href="/users/{{ user.id }}/edit" role="button">名前を変更する</a>
     
     <h2>投稿一覧</h2>
