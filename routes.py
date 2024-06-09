@@ -116,6 +116,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
 from db import db, User, Post, init_app
+from PIL import Image
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -237,8 +238,15 @@ def edit_user(user_id):
             icon = request.files['icon']
             if icon.filename != '':
                 filename = secure_filename(icon.filename)
-                icon.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                icon_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                icon.save(icon_path)
+                
+                img = Image.open(icon_path)
+                img = img.resize((60, 60))
+                img.save(icon_path)
+
                 user.icon = filename
+                
         db.session.commit()
         return redirect(f'/users/{user.id}')
     return render_template('user_edit.html', user=user)
