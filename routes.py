@@ -278,7 +278,7 @@ def edit_user(user_id):
         if new_username:
             user.username = new_username
         
-        if 'icon' in request.files:
+        if 'icon' in request.files and request.files['icon'].filename != '':
             icon = request.files['icon']
             filename = secure_filename(icon.filename)
             icon_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
