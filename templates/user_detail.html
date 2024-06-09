@@ -1,21 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<body>
+<div class="container mt-5">
     <title>{{ user.username }}の詳細</title>
-    <p>ID: {{ user.id }}</p>
-    <p>ユーザー名: {{ user.username }}</p>
-    <img src="{{ url_for('static', filename='icons/' ~ user.icon) }}" alt="{{ user.username }}のアイコン">
-    <a href="/users/{{ user.id }}/edit" role="button">名前を変更する</a>
-    
-    <h2>投稿一覧</h2>
-    <ul>
-    {% for post in posts %}
-        <li>
-            <a href="/posts/{{ post.id }}">{{ post.title }}</a>
-            <p>日時: {{ post.created_at }}</p>
-        </li>
-    {% endfor %}
-    </ul>
-    <a href="/" role="button">戻る</a>
-</body>
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ user.username }}の詳細</h1>
+            <p class="card-text">ID: {{ user.id }}</p>
+            <p class="card-text">ユーザー名: {{ user.username }}</p>
+            <img src="{{ url_for('static', filename='icons/' ~ user.icon) }}" alt="{{ user.username }}のアイコン" class="img-thumbnail mb-3">
+            <div class="d-grid mb-4">
+                <a href="/users/{{ user.id }}/edit" class="btn btn-primary" role="button">名前を変更する</a>
+            </div>
+            
+            <h2 class="card-title">投稿一覧</h2>
+            <ul class="list-group list-group-flush">
+                {% for post in posts %}
+                    <li class="list-group-item">
+                        <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+                        <p class="mb-0">日時: {{ post.created_at }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="d-grid mt-4">
+                <a href="/" class="btn btn-secondary" role="button">戻る</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

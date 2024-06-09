@@ -2,10 +2,12 @@
 {% block content %}
     <h1>{{ user.username }}の名前を変更</h1>
     <form method="POST" enctype="multipart/form-data">
-        <label for="username">新しいユーザー名:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}">
-        <label for="icon">新しいアイコン:</label>
+        <label for="username" class="form-label">新しいユーザー名:</label>
+        <input type="text" id="username" name="username" value="{{ user.username }}" >
+
+        <label for="icon" class="form-label">新しいアイコン:</label>
         <input type="file" id="icon" name="icon" accept="image/png, image/jpeg">
+
         <button type="submit">変更</button>
         {% if error %}
             <p style="color:red;">{{ error }}</p>

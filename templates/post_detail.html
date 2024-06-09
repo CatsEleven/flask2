@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-<body>
+<div class="container mt-5">
     <title>{{ post.title }}</title>
-    <h1>{{ post.title }}</h1>
-    <p>日時：{{ post.created_at }}</p>
-    <p>内容：{{ post.body }}</p>
-    <p>ユーザー：{{ post.author.username }}</p>  <!-- ユーザー名を表示 -->
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">{{ post.title }}</h1>
+            <p class="card-text">日時：{{ post.created_at }}</p>
+            <p class="card-text">内容：{{ post.body }}</p>
+            <p class="card-text">ユーザー：{{ post.author.username }}</p>  <!-- ユーザー名を表示 -->
 
-    {% if current_user.is_authenticated and current_user.username == post.author.username %}
-        <a href="/{{ post.id }}/update" role="button">編集</a>
-        <a href="/{{ post.id }}/delete" role="button">削除</a>
-    {% endif %}
-    <a href="/" role="button">戻る</a>
-</body>
+            {% if current_user.is_authenticated and current_user.username == post.author.username %}
+                <div class="d-flex mb-3">
+                    <a href="/{{ post.id }}/update" class="btn btn-primary me-2" role="button">編集</a>
+                    <a href="/{{ post.id }}/delete" class="btn btn-danger" role="button">削除</a>
+                </div>
+            {% endif %}
+            <a href="/" class="btn btn-secondary" role="button">戻る</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
