@@ -211,5 +211,12 @@ def post_detail(post_id):
     return render_template('post_detail.html', post=post)
 
 
+@app.route("/users/<int:user_id>", methods=['GET'])
+def user_detail(user_id):
+    user = User.query.get_or_404(user_id)
+    posts = Post.query.filter_by(user_id=user_id).all()
+    return render_template('user_detail.html', user=user, posts=posts)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

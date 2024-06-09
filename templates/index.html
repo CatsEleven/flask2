@@ -7,6 +7,7 @@
     {% if current_user.is_authenticated %}
         <a href="/logout">ログアウト</a>
         <p>こんにちは、{{ current_user.username }}さん</p>
+        <a href="/users/{{ current_user.id }}" role="button">あなたのページを見る</a>
     {% endif %}
 
 
@@ -14,7 +15,7 @@
         <h2><a href="/posts/{{ post.id }}">{{ post.title }}</a></h2>
         <p>日時：{{post.created_at}}</p>
         <p>内容：{{post.body}}</p>
-        <p>ユーザー：{{post.author.username}}</p>
+        <p>ユーザー：<a href="/users/{{ post.user_id }}">{{ post.author.username }}</a></p>  <!-- ユーザー名を表示 -->
         {% if current_user.is_authenticated and current_user.username == post.author.username %}
             <a href="/{{post.id}}/update" role="button">編集</a>
             <a href="/{{post.id}}/delete" role="button">削除</a>

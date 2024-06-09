@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <title>{{ user.username }}の詳細</title>
+    <p>ID: {{ user.id }}</p>
+    <p>ユーザー名: {{ user.username }}</p>
+    
+    <h2>投稿一覧</h2>
+    <ul>
+    {% for post in posts %}
+        <li>
+            <a href="/posts/{{ post.id }}">{{ post.title }}</a>
+            <p>日時: {{ post.created_at }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+    <a href="/" role="button">戻る</a>
+</body>
+{% endblock %}
