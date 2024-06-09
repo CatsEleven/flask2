@@ -1,17 +1,25 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>{{ user.username }}の名前を変更</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">{{ user.username }}の名前を変更</h1>
     <form method="POST" enctype="multipart/form-data">
-        <label for="username" class="form-label">新しいユーザー名:</label>
-        <input type="text" id="username" name="username" value="{{ user.username }}" >
-
-        <label for="icon" class="form-label">新しいアイコン:</label>
-        <input type="file" id="icon" name="icon" accept="image/png, image/jpeg">
-
-        <button type="submit">変更</button>
+        <div class="mb-3">
+            <label for="username" class="form-label">新しいユーザー名:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="icon" class="form-label">新しいアイコン:</label>
+            <input type="file" id="icon" name="icon" accept="image/png, image/jpeg" class="form-control">
+        </div>
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary btn-block">変更</button>
+        </div>
         {% if error %}
-            <p style="color:red;">{{ error }}</p>
+            <p class="text-danger mt-3">{{ error }}</p>
         {% endif %}
     </form>
-    <a href="/users/{{ user.id }}" role="button">戻る</a>
+    <div class="d-grid mt-3">
+        <a href="/users/{{ user.id }}" class="btn btn-secondary" role="button">戻る</a>
+    </div>
+</div>
 {% endblock %}
