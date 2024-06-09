@@ -218,5 +218,10 @@ def user_detail(user_id):
     return render_template('user_detail.html', user=user, posts=posts)
 
 
+@app.route("/users", methods=['GET'])
+def user_list():
+    users = User.query.all()
+    return render_template('user_list.html', users=users)
+
 if __name__ == "__main__":
     app.run(debug=True)

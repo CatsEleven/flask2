@@ -8,6 +8,7 @@
         <a href="/logout">ログアウト</a>
         <p>こんにちは、{{ current_user.username }}さん</p>
         <a href="/users/{{ current_user.id }}" role="button">あなたのページを見る</a>
+        <a href="/users" role="button">ユーザー一覧を見る</a>
     {% endif %}
 
 
