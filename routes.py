@@ -204,5 +204,12 @@ def delete(id):
     db.session.commit()
     return redirect('/')
 
+
+@app.route("/posts/<int:post_id>", methods=['GET'])
+def post_detail(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post_detail.html', post=post)
+
+
 if __name__ == "__main__":
     app.run(debug=True)

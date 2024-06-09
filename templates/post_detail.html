@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<body>
+    <title>{{ post.title }}</title>
+    <h1>{{ post.title }}</h1>
+    <p>日時：{{ post.created_at }}</p>
+    <p>内容：{{ post.body }}</p>
+    <p>ユーザー：{{ post.author.username }}</p>  <!-- ユーザー名を表示 -->
+
+    {% if current_user.is_authenticated and current_user.username == post.author.username %}
+        <a href="/{{ post.id }}/update" role="button">編集</a>
+        <a href="/{{ post.id }}/delete" role="button">削除</a>
+    {% endif %}
+    <a href="/" role="button">戻る</a>
+</body>
+{% endblock %}
