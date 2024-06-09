@@ -117,6 +117,7 @@ from werkzeug.utils import secure_filename
 import os
 from db import db, User, Post, init_app
 from PIL import Image
+import magic
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -226,6 +227,48 @@ def user_list():
     users = User.query.all()
     return render_template('user_list.html', users=users)
 
+
+# MINEを使ってファイルの種類を判定
+# ALLOWED_MIME_TYPES = {'image/png', 'image/jpeg'}
+# def allowed_file_type(file_path):
+#     # mine = magic.Magic(mine=True)
+#     # file_mine = mine.from_file(file_path)
+#     result = magic.from_file(file_path, mime=True)
+#     return result in ALLOWED_MIME_TYPES
+
+
+# @app.route("/users/<int:user_id>/edit", methods=['GET', 'POST'])
+# @login_required
+# def edit_user(user_id):
+#     user = User.query.get_or_404(user_id)
+#     if request.method == 'POST':
+#         new_username = request.form.get('username')
+#         if new_username:
+#             user.username = new_username
+#         if 'icon' in request.files:
+#             icon = request.files['icon']
+#             filename = secure_filename(icon.filename)
+#             icon_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+#             icon.save(icon_path)
+#             if icon.filename != '' and allowed_file_type(icon_path):
+#                 icon.save(icon_path)
+                
+#                 img = Image.open(icon_path)
+#                 img = img.resize((60, 60))
+#                 img.save(icon_path)
+#                 user.icon = filename
+#             else:
+#                 os.remove(icon_path)
+#                 return render_template('user_edit.html', user=user, error="不正なファイルが含まれています。")
+
+#         db.session.commit()
+#         return redirect(f'/users/{user.id}')
+#     return render_template('user_edit.html', user=user)
+ALLOWED_MIME_TYPES = {'image/png', 'image/jpeg'}
+def allowed_file_type(file_path):
+    result = magic.from_file(file_path, mime=True)
+    return result in ALLOWED_MIME_TYPES
+
 @app.route("/users/<int:user_id>/edit", methods=['GET', 'POST'])
 @login_required
 def edit_user(user_id):
@@ -234,42 +277,29 @@ def edit_user(user_id):
         new_username = request.form.get('username')
         if new_username:
             user.username = new_username
+        
         if 'icon' in request.files:
             icon = request.files['icon']
-            if icon.filename != '':
-                filename = secure_filename(icon.filename)
-                icon_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                icon.save(icon_path)
-                
+            filename = secure_filename(icon.filename)
+            icon_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            
+            # 一時的にファイルを保存
+            icon.save(icon_path)
+            
+            # ファイルタイプの確認
+            if allowed_file_type(icon_path):
+                # 画像の処理
                 img = Image.open(icon_path)
                 img = img.resize((60, 60))
                 img.save(icon_path)
-
                 user.icon = filename
-                
+            else:
+                os.remove(icon_path)  # 許可されていないファイルの場合ファイルを削除
+                return render_template('user_edit.html', user=user, error="不正なファイルが含まれています。")
+        
         db.session.commit()
         return redirect(f'/users/{user.id}')
     return render_template('user_edit.html', user=user)
-# @app.route("/user/<int:user_id>/edit", methods=['GET', 'POST'])
-# @login_required
-# def edit_user(user_id):
-#     user = User.query.get_or_404(user_id)
-#     if request.method == 'POST':
-#         new_username = request.form.get('username')
-#         if new_username:
-#             user.username = new_username
-
-#         # アイコンアップロード処理
-#         if 'icon' in request.files:
-#             icon = request.files['icon']
-#             if icon.filename != '':
-#                 filename = secure_filename(icon.filename)
-#                 icon.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#                 user.icon = filename
-
-#         db.session.commit()
-#         return redirect(url_for('user_detail', user_id=user.id))
-#     return render_template('user_edit.html', user=user)
 
 
 if __name__ == "__main__":

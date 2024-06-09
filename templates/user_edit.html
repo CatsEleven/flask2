@@ -5,8 +5,11 @@
         <label for="username">新しいユーザー名:</label>
         <input type="text" id="username" name="username" value="{{ user.username }}">
         <label for="icon">新しいアイコン:</label>
-        <input type="file" id="icon" name="icon" accept="image/png, image/jpg">
+        <input type="file" id="icon" name="icon" accept="image/png, image/jpeg">
         <button type="submit">変更</button>
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
     </form>
     <a href="/users/{{ user.id }}" role="button">戻る</a>
 {% endblock %}
